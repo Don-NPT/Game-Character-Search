@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "elasticsearch": "^16.7.2",
+    "flask": "^0.2.10"
+  }
+}

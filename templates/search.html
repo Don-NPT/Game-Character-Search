@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Search engine</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    </head>
+
+    <body style="background-image: linear-gradient(0deg, #7f5a83, #0d324d);height: 100%vh;">
+        <div class="container">
+            <div class="col-5 col-md-6 offset-md-3">
+                <a href="{{ url_for('index') }}"><img class="img-fluid col-md-6 offset-md-3" src="./static/img/carroter_logo1.png"></a>
+            </div>
+            <form class="row g-3 mt-2 mb-2" method="GET" action="{{ url_for('search') }}">
+                <div class="col-1">
+                </div>
+                <div class="col-8">
+                    <input type="text" class="form-control text-dark" name="keyword" placeholder="Enter your keyword" value="{{ keyword }}" style="  border-radius: 20px;">
+                </div>
+                <div class="col-2">
+                    <button type="submit" class="btn btn-warning text-dark">Search</button>
+                </div>
+            </form>
+            {% if hits %}
+            <div class="row">
+                <ul class="list-group list-group-flush">
+                    {% for doc in hits %}
+                    <li class="list-group-item text-light rounded mt-1 border-light" style="background: rgba(43, 41, 58, 0.25);">
+                        <h4 class="text-warning">{{ doc['char_name'] }} <span class="fw-light text-muted">{{ doc['char_gender'] }}</span></h4>
+                        <h5>{{ doc['game_name'] }}</h5> 
+                        {{ doc['description'] }}<span class="fw-light text-muted">   {{ doc['game_char_id'] }}</span></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <nav aria-label="Page navigation" class="mt-2">
+                <ul class="pagination justify-content-center">
+                    {% if page_no!=1 %}
+                    <li class="page-item"><a class="page-link" href="?keyword={{ keyword }}&page=1">First</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="?keyword={{ keyword }}&page={{ page_no-1 }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="?keyword={{ keyword }}&page={{ page_no-1 }}">{{ page_no-1 }}</a></li> 
+                    {% endif %}
+                    {% if page_total!=1 %}
+                    <li class="page-item active"><a class="page-link" href="#">{{ page_no }}</a></li>
+                    {% endif %}
+                    {% if page_no<page_total %}
+                    <li class="page-item"><a class="page-link" href="?keyword={{ keyword }}&page={{ page_no+1 }}">{{ page_no+1 }}</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="?keyword={{ keyword }}&page={{ page_no+1 }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="?keyword={{ keyword }}&page={{ page_total }}">Last</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% else %}
+            <div class="row text-center">
+                <h3>No result</h5>
+            </div>
+            {% endif %}
+        </div>
+    </body>
+</html>
